@@ -73,6 +73,8 @@ While this gem _should_ in all cases be Windows-compatible, event scripts are th
 - `AWS_REGION`/`AWS_DEFAULT_REGION`: the AWS region of this Auster stack
 
 ### Ruby Methods in Event Scripts ###
+- `plan_id`: the identifier of this Auster stack, as per `PLAN_ID`.
+- `aws_region`: the AWS region of this Auster stack, as per `AWS_REGION`.
 - `repo`: the `Cfer::Auster::Repo` object representing the entire repo.
 - `config_set`: the `Cfer::Auster:Config` object representing the collection of parameters related to this environment.
 - `exports(export_plan_id = PLAN_ID)`: fetches all CloudFormation exports for a given plan (by default, the one of the secuting stack). The preferred method of accessing data from a dependent stack.
@@ -91,8 +93,8 @@ Auster uses a convention-based arrangement for structuring the Cfer scripts that
 - `/steps/##.tag/cfer/defs/**/*.rb` - intended for defining `resource`s.
 
 ### Auster Cfer Helpers ###
-- `import_value(name)`: Wrapper around `Fn::ImportValue` that prepends the current plan's AusterID to the name in question.
-- `export(name, value)`: Wrapper around `output` to export the value in question. Prepends the plan's AusterID in the same way that `import_value` expects.
+- `import_value(name)`: Wrapper around `Fn::ImportValue` that prepends the current plan's ID to the name in question.
+- `export(name, value)`: Wrapper around `output` to export the value in question. Prepends the plan's ID in the same way that `import_value` expects.
 
 ## Structure ##
 Auster introduces the concept of _plans_. Each plan is laid out as per the following directory structure:
