@@ -1,0 +1,13 @@
+[*]
+insert_final_newline = true
+charset = utf-8
+
+[*.md]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true
+
+[*.{js,json,rb}]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true

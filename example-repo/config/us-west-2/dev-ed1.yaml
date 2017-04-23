@@ -1,0 +1,7 @@
+Foo: 1
+Bar: ~
+
+Baz:
+  Something: yes
+  Else: no
+  Okay: sure

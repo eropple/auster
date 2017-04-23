@@ -1,0 +1,41 @@
+AllCops:
+  TargetRubyVersion: 2.3
+  Exclude:
+    - "*.gemspec"
+
+Metrics/AbcSize:
+  Enabled: false # because ABC tells you nothing useful!
+
+Metrics/LineLength:
+  Max: 120
+
+Metrics/BlockLength:
+  Exclude:
+    - "Rakefile"
+    - "spec/**/*.rb"
+
+Metrics/ClassLength:
+  Max: 1500
+  
+Metrics/MethodLength:
+  Max: 35
+
+Metrics/ModuleLength:
+  Max: 1500
+  Exclude:
+    - "spec/**/*.rb"
+
+Metrics/ParameterLists:
+  Enabled: false # this is a really strange thing when you use named parameters.
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/Documentation:
+  Enabled: false
+
+Style/DoubleNegation:
+  Enabled: false # avoids dangling object pointers
+
+Performance/RedundantBlockCall:
+  Enabled: false # because `block.call` is more explicit than a "yield" somewhere down low

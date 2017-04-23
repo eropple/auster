@@ -1,0 +1,10 @@
+type: map
+mapping:
+  Foo: { type: int, required: yes }
+  Bar: { type: scalar, required: no }
+  Baz:
+    type: map
+    mapping:
+      Something: { type: bool, required: yes }
+      Else: { type: bool, required: no }
+      Okay: { type: scalar, required: yes }
