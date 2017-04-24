@@ -15,24 +15,14 @@ module Cfer
         "#{parameters[:PlanID]}--#{name}"
       end
 
-      class Cfizer
-        begin
-          include Cfer::Core::Functions
-        rescue NameError => _
-          # we need to fall back to the old Cfer setup
-          include Cfer::Core
-          include Cfer::Cfn
-        end
-
-        def cfize(directive)
-          instance_eval directive
-        end
+      def cfize(text, capture_regexp: nil)
+        CferHelpers.cfize(text, capture_regexp: capture_regexp)
       end
 
-      def cfize(text, capture_regexp: nil)
+      def self.cfize(text, capture_regexp: nil)
         raise "'text' must be a string." unless text.is_a?(String)
 
-        capture_regexp ||= DEFAULT_CAPTURE_REGEXP
+        capture_regexp ||= CFIZER_DEFAULT_CAPTURE_REGEXP
 
         raise "'capture_regexp' must be a Regexp." unless capture_regexp.is_a?(Regexp)
         raise "'capture_regexp' must include a 'contents' named 'directive'." \
@@ -57,6 +47,20 @@ module Cfer
             cfizer.cfize(match["directive"])
           end
         end.reject { |t| t == ""})
+      end
+
+      class Cfizer
+        begin
+          include Cfer::Core::Functions
+        rescue NameError => _
+          # we need to fall back to the old Cfer setup
+          include Cfer::Core
+          include Cfer::Cfn
+        end
+
+        def cfize(directive)
+          instance_eval directive
+        end
       end
     end
   end

@@ -1,7 +1,9 @@
 # Auster #
 _The Best Way To Wrangle CloudFormation (at least, according to me!)_
 
-**Auster** is a best-practices extension to the [Cfer](https://github.com/seanedwards/cfer) environment that establishes conventions for effectively working with Cfer and CloudFormation. It's developed from some of the lessons that I've learned over time building out large-scale systems for companies big and small and running into the stumbling blocks that always pop up when trying to automate a full stack deployment. The biggest roadblock to making your deployment awesome is the impedance mismatch between tools like CloudFormation (and implicitly Cfer) and the world you're working in. CloudFormation is a declarative system: "this should exist when you're done". And that's great...until you have to start introducing stateful changes to your system! That RDS node you set up is awesome, but now you need to roll its passwords. That S3 bucket is fine, but now you need to upload seed files. This is where Auster comes in, allowing you to orchestrate those stateful transitions between steps.
+**Auster** is a best-practices extension to the [Cfer](https://github.com/seanedwards/cfer) environment that establishes conventions for effectively working with Cfer and CloudFormation. It's developed from some of the lessons that I've learned over time building out large-scale systems for companies big and small and running into the stumbling blocks that always pop up when trying to automate a full stack deployment.
+
+The biggest roadblock to making your deployment awesome is the impedance mismatch between tools like CloudFormation (and implicitly Cfer) and the world you're working in. CloudFormation is a declarative system: "this should exist when you're done". And that's great...until you have to start introducing stateful changes to your system! (Which, if you're doing it right, will be approximately "five seconds after you stand up an RDS server.") This is where Auster comes in, allowing you to orchestrate those stateful transitions between steps.
 
 **Caveat emptor:** The code that became Auster has been in use for a few months, but Auster itself is very much a work in progress. I use this for stuff that pays money and I'll stand behind it, but you should make your own call.
 
@@ -97,10 +99,11 @@ Auster uses a convention-based arrangement for structuring the Cfer scripts that
 - `export(name, value)`: Wrapper around `output` to export the value in question. Prepends the plan's ID in the same way that `import_value` expects.
 
 ## Structure ##
-Auster introduces the concept of _plans_. Each plan is laid out as per the following directory structure:
+Each Auster plan is laid out as per the following directory structure:
 
 - `/`
   - `/.auster.yaml` - Currently empty; intended for future global configuration. (Necessary to find the base of a repo, a la Rakefile/Gemfiles.)
+  - `/Gemfile` - Used for script dependencies, etc. as per usual. (You should probably require `auster` here too, to version-pin it.)
   - `/config`
     - `/schema.yaml` - (optional) a [Kwalify](http://www.kuwata-lab.com/kwalify/ruby/users-guide.html) schema against which a configuration file will be checked before any operations can be taken.
     - `/validator.rb` - (optional) a `Cfer::Auster::ParamValidator` that, if it exists, will be run against the parameter set _after_ YAML loading but _before_ Cfer is run.

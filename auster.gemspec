@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Ed Ropple"]
   spec.email         = ["ed+auster@edropple.com"]
 
-  spec.summary       = "Best-practices tooling and structure around Cfer."
+  spec.summary       = "Best-practices tooling for CloudFormation and AWS."
   spec.homepage      = "https://github.com/eropple/auster"
   spec.license       = "MIT"
 

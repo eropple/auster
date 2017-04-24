@@ -3,7 +3,19 @@
 require "cfer"
 
 module Cfer
+  module Core
+    class Resource
+      # TODO: we need a better way to inject general helpers.
+
+      def cfize(text, capture_regexp: nil)
+        Cfer::Auster::CferHelpers.cfize(text, capture_regexp: capture_regexp)
+      end
+    end
+  end
+
   module Auster
+    class CloudFormationError < RuntimeError; end
+
     class CferEvaluator
       include Cfer::Auster::Logging::Mixin
 
@@ -15,11 +27,17 @@ module Cfer
 
         raise "parameters must be a Hash" unless parameters.is_a?(Hash)
 
+        parameters[:AusterOptions] ||= {}
+
         @stack_name = stack_name
         @stack_options = stack_options
-        @cfer_client = Cfer::Cfn::Client.new(client_options.merge(stack_name: stack_name))
+        @cfer_client = Cfer::Cfn::Client.new(client_options.merge(stack_name: stack_name, region: parameters[:AWSRegion]))
         @cfer_stack = Cfer::Core::Stack.new(
-          stack_options.merge(client: @cfer_client, include_base: path, parameters: parameters)
+          stack_options.merge(
+            client: @cfer_client, include_base: path, parameters: parameters,
+            force_s3: !!parameters[:AusterOptions][:S3Path],
+            s3_path: parameters[:AusterOptions][:S3Path]
+          )
         )
 
         require_rb = File.join(path, "require.rb")
@@ -75,13 +93,26 @@ module Cfer
         tail! if block
       end
 
-      def tail!
+      def tail!(throw_if_failed: true)
+        tail_start = DateTime.now
+        has_shown_bar = false
+        has_failed = false
+
         @cfer_client.tail(follow: true) do |event|
+          has_failed = true if event.timestamp >= tail_start && event.resource_status.include?("FAILED")
+          if event.timestamp >= tail_start && !has_shown_bar
+            logger.info "CFN >> ----- CURRENT RUN START -----"
+            has_failed = false
+            has_shown_bar = true
+          end
           logger.info "CFN >> %-30s %-40s %-20s %s" % [
             event.resource_status, event.resource_type,
             event.logical_resource_id, event.resource_status_reason
           ]
         end
+
+        raise "Operation failed. Please check the log." if has_failed && throw_if_failed
+        nil
       end
 
       def generate_json

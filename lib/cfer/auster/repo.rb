@@ -138,7 +138,7 @@ module Cfer
 
           validator
         else
-          Cfer::Auster::ParamValidator.new {}
+          Cfer::Auster::ParamValidator.new { |_, _| }
         end
       end
 

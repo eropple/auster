@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 require "cri"
+require "semantic"
+require "json"
 
 require "cfer/auster"
 require "cfer/auster/cli/_shared"
@@ -21,6 +23,17 @@ module Cfer
 
           flag :h, :help, "show help for this command" do |_, cmd|
             puts cmd.help
+            Kernel.exit 0
+          end
+
+          flag nil, :version, "show version information for this command" do |_, _|
+            puts Cfer::Auster::VERSION
+            Kernel.exit 0
+          end
+          flag nil, :"version-json", "show version information for this command in JSON" do |_, _|
+            puts JSON.pretty_generate(
+              Semantic::Version.new(Cfer::Auster::VERSION).to_h.reject { |_, v| v.nil? }
+            )
             Kernel.exit 0
           end
 
