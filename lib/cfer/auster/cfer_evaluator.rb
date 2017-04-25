@@ -45,19 +45,21 @@ module Cfer
         outputs_rb = File.join(path, "outputs.rb")
 
         global_helpers_dir = File.join(path, "../../../cfer-helpers")
+        global_helpers = Dir["#{global_helpers_dir}/**/*.rb"].reject { |f| File.basename(f).start_with?("_") }
         helpers_dir = File.join(path, "helpers")
+        helpers = Dir["#{helpers_dir}/**/*.rb"].reject { |f| File.basename(f).start_with?("_") }
         defs_dir = File.join(path, "defs")
 
         @cfer_stack.extend Cfer::Auster::CferHelpers
         @cfer_stack.build_from_block do
           self[:Metadata][:Auster] = metadata
 
-          Dir["#{global_helpers_dir}/**/*.rb"].each do |helper_file|
-            instance_eval(IO.read(helper_file), helper_file)
+          global_helpers.each do |helper_file|
+            eval_file helper_file
           end
 
-          Dir["#{helpers_dir}/**/*.rb"].each do |helper_file|
-            instance_eval(IO.read(helper_file), helper_file)
+          helpers.each do |helper_file|
+            eval_file helper_file
           end
 
           [require_rb, parameters_rb, outputs_rb].each do |file|
@@ -98,7 +100,7 @@ module Cfer
         has_shown_bar = false
         has_failed = false
 
-        @cfer_client.tail(follow: true) do |event|
+        @cfer_client.tail(number: 0, follow: true) do |event|
           has_failed = true if event.timestamp >= tail_start && event.resource_status.include?("FAILED")
           if event.timestamp >= tail_start && !has_shown_bar
             logger.info "CFN >> ----- CURRENT RUN START -----"

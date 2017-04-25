@@ -3,6 +3,10 @@ module Cfer
     module CferHelpers
       CFIZER_DEFAULT_CAPTURE_REGEXP = /C\{(?<directive>.*?)\}/
 
+      def eval_file(filename)
+        instance_eval IO.read(filename), filename
+      end
+
       def import(name)
         { "Fn::ImportValue" => _exported_name(name) }
       end
