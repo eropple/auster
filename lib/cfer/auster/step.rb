@@ -62,7 +62,7 @@ module Cfer
         end
       end
 
-      def run(config_set)
+      def apply(config_set)
         raise "config_set must be a Cfer::Auster::Config." unless config_set.is_a?(Cfer::Auster::Config)
 
         with_cfer(config_set) do |cfer|

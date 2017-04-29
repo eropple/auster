@@ -6,11 +6,11 @@ require "cfer/auster/cli/_shared"
 module Cfer
   module Auster
     module CLI
-      def self.destroy
+      def self.apply
         Cri::Command.define do
-          name "destroy"
-          usage "destroy aws-region/config-set count-or-tag"
-          description "Destroys this Auster step in your AWS account."
+          name "apply"
+          usage "apply aws-region/config-set count-or-tag"
+          description "Applies this Auster step against your AWS infrastructure."
 
           CLI.standard_options(self)
 
@@ -24,7 +24,7 @@ module Cfer
                 config_set = repo.config_set(args.shift)
                 step = repo.step_by_count_or_tag(args.shift)
 
-                step.destroy(config_set)
+                step.apply(config_set)
               end
             end
           end

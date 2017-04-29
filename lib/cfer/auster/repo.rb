@@ -73,6 +73,28 @@ module Cfer
         @steps.sort.map(&:last)
       end
 
+      def tasks
+        Dir["#{root}/tasks/**/*.rb"].reject { |f| File.basename(f).start_with?("_") }.map do |f|
+          f.gsub("#{root}/tasks/", "").gsub(/\.rb$/, "")
+        end
+      end
+
+      def run_task(task_name, config_set, args = [])
+        logger.debug "Attempting to run task '#{task_name}'."
+        task_file = "#{root}/tasks/#{task_name}.rb"
+
+        raise "task '#{task_name}' (#{task_file}) doesn't exist." \
+          unless File.file?(task_file)
+
+        Cfer::Auster::ScriptExecutor.new(
+          config_set.env_vars_for_shell.merge(
+            repo: self,
+            config_set: config_set,
+            args: args
+          )
+        ).run(task_file)
+      end
+
       def config_set(id)
         raise "Config set not found with id '#{id}'." unless @config_sets.include?(id)
 

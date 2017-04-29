@@ -24,8 +24,9 @@ module Cfer
               exit 1
             else
               CLI.repo_from_options(opts) do |repo|
-                config_set = repo.config_set(args[0])
-                step = repo.step_by_count_or_tag(args[1])
+                args = args.dup
+                config_set = repo.config_set(args.shift)
+                step = repo.step_by_count_or_tag(args.shift)
 
                 ret = step.json(config_set)
 

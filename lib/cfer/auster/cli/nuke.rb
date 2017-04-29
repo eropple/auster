@@ -24,7 +24,8 @@ module Cfer
               exit 1
             else
               CLI.repo_from_options(opts) do |repo|
-                config_set = repo.config_set(args[0])
+                args = args.dup
+                config_set = repo.config_set(args.shift)
 
                 accepted = !!opts[:force]
 

@@ -21,8 +21,6 @@ module Cfer
 
         @data[:PlanID] = @name
         @data[:AWSRegion] = @aws_region
-
-        IceNine.deep_freeze(@data)
       end
 
       def full_name

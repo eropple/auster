@@ -6,11 +6,11 @@ require "cfer/auster/cli/_shared"
 module Cfer
   module Auster
     module CLI
-      def self.run
+      def self.task
         Cri::Command.define do
-          name "run"
-          usage "run aws-region/config-set count-or-tag"
-          description "Runs this Auster step against your AWS infrastructure."
+          name "task"
+          usage "task aws-region/config-set script-name [args]"
+          description "Runs a task within the context of an Auster config set."
 
           CLI.standard_options(self)
 
@@ -20,10 +20,11 @@ module Cfer
               exit 1
             else
               CLI.repo_from_options(opts) do |repo|
-                config_set = repo.config_set(args[0])
-                step = repo.step_by_count_or_tag(args[1])
+                args = args.dup
+                config_set = repo.config_set(args.shift)
+                task_name = args.shift
 
-                step.run(config_set)
+                repo.run_task(task_name, config_set, args)
               end
             end
           end

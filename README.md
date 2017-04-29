@@ -19,8 +19,8 @@ $ cd auster/example-repo
 Take a look around the repo if you'd like. Ensure that you have valid AWS credentials in your environment (`AWS_PROFILE`, etc.) and then run the following to create a pair of CloudFormation stacks. All they'll do is create S3 buckets, so you won't be charged for anything.
 
 ```bash
-$ auster run us-west-2/dev-ed1 bootstrap
-$ auster run us-west-2/dev-ed1 dependent
+$ auster apply us-west-2/dev-ed1 bootstrap
+$ auster apply us-west-2/dev-ed1 dependent
 ```
 
 If you read through the Auster output, you'll see that it's creating S3 buckets (as you'd expect--it's still CloudFormation under the hood) and registering them as region-wide exports, prefixed with the plan ID `dev1-ed`.
@@ -39,10 +39,10 @@ If you'd like more information on writing Cfer itself, check out [chef-cfer-cons
 - `auster generate step ##.human-tag` - Creates a new Auster step with stub files.
 
 ### Executors ###
-**Note:** In the command line interface, the step number and the tag are interchangeable. `auster run region/env 00` and `auster run region/env human-tag` will refer to the same step, `00.human-tag`.
+**Note:** In the command line interface, the step number and the tag are interchangeable. `auster apply region/env 00` and `auster apply region/env human-tag` will refer to the same step, `00.human-tag`.
 
-- `auster json us-west-2/dev1-ed (##|human-tag)` - Uses `cfer generate` to generate the output JSON that will be applied when this step is `auster run`'d.
-- `auster run us-west-2/dev1-ed (##|human-tag)` - Runs step 01 in region `us-west2` with configuration set `dev1-ed`. This will:
+- `auster json us-west-2/dev1-ed (##|human-tag)` - Uses `cfer generate` to generate the output JSON that will be applied when this step is `auster apply`'d.
+- `auster apply us-west-2/dev1-ed (##|human-tag)` - Runs step 01 in region `us-west2` with configuration set `dev1-ed`. This will:
   - If `/cfg/_schema.yaml` exists, it will validate `/cfg/us-west2/dev1-ed.yaml` against it and fail if it does not validate.
   - If this is the first run of this step (there is no `dev1-ed-step01` CloudFormation stack in AWS), the scripts in `/steps/01/on-create.d` will be run in lexicographic order.
   - The scripts in `/steps/01/pre-converge.d` will be run in lexicographic order.
