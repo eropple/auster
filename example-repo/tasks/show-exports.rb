@@ -1,1 +1,3 @@
-puts exports.inspect
+require "json"
+
+puts JSON.pretty_generate(exports)

@@ -25,7 +25,15 @@ $ auster apply us-west-2/dev-ed1 dependent
 
 If you read through the Auster output, you'll see that it's creating S3 buckets (as you'd expect--it's still CloudFormation under the hood) and registering them as region-wide exports, prefixed with the plan ID `dev1-ed`.
 
-Anyhoo, let's clean up.
+Auster also provides functionality for running tasks with `auster task` (and listing them with `auster tasks`). Let's look at our exports, for example:
+
+```bash
+$ auster task us-west-2/dev-ed1 show-exports
+```
+
+This'll print out a JSON breakdown of the exports from this stack (S3 bucket names, because we are very cheap.)
+
+Anyhoo, all done. Let's clean up.
 
 ```bash
 $ auster nuke us-west-2/dev-ed1
