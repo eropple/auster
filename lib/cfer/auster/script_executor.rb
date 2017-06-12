@@ -1,3 +1,5 @@
+require "cfer/auster/aws_utils"
+
 module Cfer
   module Auster
     class ScriptExecutor
@@ -40,7 +42,7 @@ module Cfer
         # this call isn't super fast, so we cache a little bit.
         @exports ||= {}
         @exports[export_plan_id] ||=
-          cfn_client.list_exports.exports.map do |cfn_export|
+          AwsUtils.all_from_pager(cfn_client.list_exports, :exports).map do |cfn_export|
             tokens = cfn_export.name.split("--", 2)
 
             if tokens.length != 2 || tokens[0] != export_plan_id
