@@ -70,6 +70,12 @@ module Cfer
           do_pre_converge(config_set)
 
           logger.info "Converging Cfer stack as '#{cfn_stack_name(config_set)}'."
+
+          opts = {
+            block: true,
+            role_arn: config_set.data[:AusterOptions][:ServiceRoleARN]
+          }
+
           cfer.converge!(block: true)
 
           do_post_converge(config_set, cfn_data(config_set))
@@ -87,6 +93,11 @@ module Cfer
         else
           logger.info "Deleting CloudFormation stack '#{stack_name}'."
           with_cfer(config_set) do |cfer|
+            opts = {
+              block: true,
+              role_arn: config_set.data[:AusterOptions][:ServiceRoleARN]
+            }
+
             cfer.destroy!(block: true)
           end
 

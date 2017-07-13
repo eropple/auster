@@ -30,8 +30,15 @@ module Cfer
         parameters[:AusterOptions] ||= {}
 
         @stack_name = stack_name
-        @stack_options = stack_options
-        @cfer_client = Cfer::Cfn::Client.new(client_options.merge(stack_name: stack_name, region: parameters[:AWSRegion]))
+        @stack_options = stack_options.merge(
+          role_arn: parameters[:AusterOptions][:ServiceRoleARN]
+        )
+        @cfer_client = Cfer::Cfn::Client.new(
+          client_options.merge(
+            stack_name: stack_name,
+            region: parameters[:AWSRegion]
+          )
+        )
         @cfer_stack = Cfer::Core::Stack.new(
           stack_options.merge(
             client: @cfer_client, include_base: path, parameters: parameters,
