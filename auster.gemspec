@@ -26,12 +26,12 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "pry"
 
-  spec.add_runtime_dependency "cri", "~> 2.8.0"
+  spec.add_runtime_dependency "cri", "~> 2.8"
   spec.add_runtime_dependency "search_up", "~> 1.0.2"
-  spec.add_runtime_dependency "activesupport", "~> 5.0.2"
+  spec.add_runtime_dependency "activesupport", "~> 5.0"
   spec.add_runtime_dependency "ice_nine", "~> 0.11.2"
   spec.add_runtime_dependency "kwalify", "~> 0.7.2"
-  spec.add_runtime_dependency "cfer", "~> 0.5.0"
+  spec.add_runtime_dependency "cfer", "~> 0.5"
   spec.add_runtime_dependency "semantic", "~> 1.6.0"
-  spec.add_runtime_dependency "aws-sdk", "~> 2.9.11"
+  spec.add_runtime_dependency "aws-sdk", "~> 2.9"
 end
